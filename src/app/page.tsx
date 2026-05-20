@@ -72,11 +72,11 @@ export default function Home() {
       
       <div className="container mx-auto h-full relative">
         
-        {/* Sidebar Icons Container - Matched to Image */}
+        {/* Sidebar Icons Container - Moved Higher (Top-32) */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-10 z-40 bg-black/40 backdrop-blur-2xl px-6 py-12 rounded-[3rem] border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+          className="fixed left-6 top-32 hidden md:flex flex-col gap-6 z-40 bg-black/40 backdrop-blur-2xl px-5 py-8 rounded-[2.5rem] border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
         >
           {folders.map((folder) => (
             <motion.button
@@ -84,15 +84,15 @@ export default function Home() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-3 group"
+              className="flex flex-col items-center gap-2 group"
             >
               <div className={cn(
-                "p-4 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
+                "p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
                 openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
               )}>
-                <folder.icon className={`w-6 h-6 ${folder.color}`} />
+                <folder.icon className={`w-5 h-5 ${folder.color}`} />
               </div>
-              <span className="text-[7px] font-mono font-black uppercase tracking-[0.3em] text-white/30 group-hover:text-primary transition-colors">
+              <span className="text-[6px] font-mono font-black uppercase tracking-[0.2em] text-white/30 group-hover:text-primary transition-colors">
                 {folder.name}
               </span>
             </motion.button>
@@ -100,12 +100,12 @@ export default function Home() {
         </motion.div>
 
         {/* Hero Section */}
-        <div className="w-full h-full flex items-center justify-center pl-0 md:pl-32">
+        <div className="w-full h-full flex items-center justify-center pl-0 md:pl-24">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
 
-        {/* Window Layer */}
-        <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center p-8">
+        {/* Window Layer - Flex Center for initial, but items are draggable */}
+        <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
           <AnimatePresence>
             {openWindows.map((winId, index) => (
               <LinuxWindow 

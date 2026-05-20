@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -47,9 +48,14 @@ export default function LinuxWindow({
         isActive ? "z-50 shadow-[0_0_50px_rgba(0,255,255,0.2)]" : "z-40 grayscale-[0.5] opacity-90",
         className
       )}
-      style={{ ...style, minWidth: '320px', minHeight: '200px' }}
+      style={{ 
+        ...style, 
+        minWidth: '320px', 
+        minHeight: '200px',
+        touchAction: 'none' // Essential for smooth dragging on all devices
+      }}
     >
-      {/* Window Header - Drag Handle */}
+      {/* Window Header - Drag Handle (The handle is the entire header area) */}
       <div className="terminal-header shrink-0 cursor-grab active:cursor-grabbing">
         <div className="flex gap-2">
           <button 
@@ -82,7 +88,7 @@ export default function LinuxWindow({
       </div>
 
       {/* Content Area */}
-      <div className="p-8 relative flex-1 overflow-hidden">
+      <div className="p-8 relative flex-1 overflow-hidden bg-black/40 backdrop-blur-sm">
         <div className="overflow-y-auto h-full pr-4 custom-scrollbar perspective-1000">
           {children}
         </div>
