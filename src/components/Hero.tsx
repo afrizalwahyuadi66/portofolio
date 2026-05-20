@@ -17,8 +17,7 @@ export default function Hero({ onStart }: HeroProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setBootStatus(prev => (prev < 100 ? prev + 1 : 100));
@@ -28,7 +27,12 @@ export default function Hero({ onStart }: HeroProps) {
 
   const startLogin = () => {
     setMode('login');
-    setTerminalLogs(['AFRIZAL_OS Kernel 6.5.0-emergent-LTS', 'System ready for authentication...', '']);
+    setTerminalLogs([
+      'AFRIZAL_OS Kernel 6.5.0-emergent-LTS',
+      'System ready for authentication...',
+      'Initializing secure handshake...',
+      ''
+    ]);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -38,7 +42,6 @@ export default function Hero({ onStart }: HeroProps) {
       setTerminalLogs(prev => [
         ...prev,
         `root@afrizal-os: login correct`,
-        `Initializing encrypted session...`,
         `[ OK ] Loading desktop environment`,
         `[ OK ] Mounting /root/sys/identity`,
         `[ OK ] Establishing secure uplink`,
@@ -52,7 +55,7 @@ export default function Hero({ onStart }: HeroProps) {
         onStart?.();
       }, 2000);
     } else {
-      setTerminalLogs(prev => [...prev, 'Login incorrect. Try root/root', '']);
+      setTerminalLogs(prev => [...prev, 'Login incorrect. Hint: root/root', '']);
       setUsername('');
       setPassword('');
     }
@@ -68,7 +71,7 @@ export default function Hero({ onStart }: HeroProps) {
       >
         <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/5 border border-primary/20 text-[10px] font-mono font-bold tracking-[0.3em] text-primary uppercase rounded-full backdrop-blur-sm">
           <Activity className="w-3 h-3 animate-pulse" />
-          SESSION: {mode === 'success' ? 'AUTHORIZED' : 'ANONYMOUS'} // KERNEL v4.0
+          SESSION: {mode === 'success' ? 'AUTHORIZED' : 'ANONYMOUS'} // KERNEL v4.0.2
         </div>
         
         <AnimatePresence mode="wait">
@@ -104,7 +107,7 @@ export default function Hero({ onStart }: HeroProps) {
               key="terminal"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-black/80 border border-primary/30 p-6 font-mono text-sm rounded-lg shadow-[0_0_40px_rgba(0,255,255,0.1)] min-h-[400px] flex flex-col"
+              className="bg-black/80 border border-primary/30 p-6 font-mono text-sm rounded-lg shadow-[0_0_40px_rgba(0,255,255,0.1)] min-h-[400px] flex flex-col pointer-events-auto"
             >
               <div className="flex gap-2 mb-4 border-b border-primary/20 pb-2 text-[10px] text-primary/50">
                 <Terminal className="w-3 h-3" />
@@ -113,7 +116,7 @@ export default function Hero({ onStart }: HeroProps) {
               
               <div className="flex-1 overflow-y-auto space-y-1 mb-4 custom-scrollbar max-h-[300px]">
                 {terminalLogs.map((log, i) => (
-                  <div key={i} className={log.includes('OK') ? 'text-secondary' : log.includes('incorrect') ? 'text-accent' : 'text-primary/70'}>
+                  <div key={i} className={log.includes('OK') || log.includes('WELCOME') ? 'text-secondary' : log.includes('incorrect') ? 'text-accent' : 'text-primary/70'}>
                     {log}
                   </div>
                 ))}
