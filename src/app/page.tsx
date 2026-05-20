@@ -90,9 +90,9 @@ export default function Home() {
                 "p-4 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
                 openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
               )}>
-                <folder.icon className={cn("w-6 h-6", folder.color)} />
+                <folder.icon className={cn("w-7 h-7", folder.color)} />
               </div>
-              <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-white/30 group-hover:text-primary transition-colors">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">
                 {folder.name}
               </span>
             </motion.button>
