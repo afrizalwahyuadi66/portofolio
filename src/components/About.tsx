@@ -1,10 +1,11 @@
+
 "use client";
 
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ShieldCheck, Target, Cpu, Code } from 'lucide-react';
+import { ShieldCheck, Target, Cpu, Code, Lock } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,7 +36,7 @@ export default function About() {
           <div className="relative aspect-square rounded-xl border border-white/10 overflow-hidden group shadow-2xl">
             <Image 
               src={profileImage?.imageUrl || "https://picsum.photos/seed/profile/800/800"} 
-              alt="Security Profile"
+              alt="Afrizal Wahyu Adi Putra"
               fill
               className="object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
               data-ai-hint="hacker profile"
@@ -62,18 +63,25 @@ export default function About() {
         <div className="space-y-6">
           <motion.div variants={itemVariants} className="text-secondary font-bold tracking-[0.5em] uppercase text-[10px]">USER_BIOMETRICS</motion.div>
           <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-headline font-black tracking-tighter leading-tight text-white">
-            Architect of <br />Secure Systems.
+            Afrizal <br />Wahyu Adi Putra
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-sm text-muted-foreground font-mono leading-relaxed italic border-l-2 border-primary/40 pl-4 bg-primary/5 py-2">
-            "In a world where data is the new oil, I am the refinery guardian who ensures zero leaks and maximum purity."
+          <motion.h3 variants={itemVariants} className="text-xl font-bold text-primary mb-4">
+            Cybersecurity Researcher & Penetration Tester
+          </motion.h3>
+          <motion.p variants={itemVariants} className="text-sm text-muted-foreground font-mono leading-relaxed border-l-2 border-primary/40 pl-4 bg-primary/5 py-2">
+            Saya adalah seorang Cybersecurity Researcher dan Mahasiswa Teknik Informatika yang memiliki dedikasi tinggi di bidang Offensive Security, Vulnerability Assessment, dan Penetration Testing (VAPT).
           </motion.p>
           
-          <motion.div variants={containerVariants} className="grid grid-cols-2 gap-4">
+          <motion.p variants={itemVariants} className="text-sm text-muted-foreground leading-relaxed">
+            Memiliki latar belakang praktisi di bidang penetrasi testing sejak tahun 2017, serta mulai dikenal sebagai security researcher publik sejak awal tahun 2023. Melakukan rekayasa malware sebagai bagian dari infrastruktur keamanan pemerintah.
+          </motion.p>
+          
+          <motion.div variants={containerVariants} className="grid grid-cols-2 gap-4 mt-6">
             {[
               { title: 'Red Teaming', icon: Target, color: 'text-accent' },
-              { title: 'Secure Coding', icon: Code, color: 'text-primary' },
-              { title: 'Cloud Armor', icon: Cpu, color: 'text-secondary' },
-              { title: 'Threat Lab', icon: ShieldCheck, color: 'text-blue-400' }
+              { title: 'Penetration Testing', icon: Code, color: 'text-primary' },
+              { title: 'Vulnerability Research', icon: Cpu, color: 'text-secondary' },
+              { title: 'Malware Analysis', icon: Lock, color: 'text-blue-400' }
             ].map((item, i) => (
               <motion.div 
                 key={i} 
@@ -90,3 +98,4 @@ export default function About() {
     </motion.div>
   );
 }
+

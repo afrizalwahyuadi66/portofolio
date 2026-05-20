@@ -3,12 +3,9 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function FloatingBackground() {
   const [mounted, setMounted] = useState(false);
-  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-bg');
   
   // Motion values for mouse position
   const mouseX = useMotionValue(0);
@@ -24,7 +21,7 @@ export default function FloatingBackground() {
   const translateX = useTransform(smoothX, [-500, 500], [25, -25]);
   const translateY = useTransform(smoothY, [-500, 500], [25, -25]);
 
-  // Lighting transforms (safe for SSR)
+  // Lighting transforms
   const lightX = useTransform(smoothX, (v) => v + (typeof window !== 'undefined' ? window.innerWidth / 2 : 0));
   const lightY = useTransform(smoothY, (v) => v + (typeof window !== 'undefined' ? window.innerHeight / 2 : 0));
 
@@ -41,145 +38,155 @@ export default function FloatingBackground() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
 
-  // Generate Neural Network Data with 3D Depth
-  const neurons = useMemo(() => {
-    return [...Array(50)].map((_, i) => ({
+  // Generate Matrix Rain Characters
+  const matrixRain = useMemo(() => {
+    return [...Array(25)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 8 + Math.random() * 12,
+      opacity: 0.1 + Math.random() * 0.3,
+    }));
+  }, []);
+
+  // Generate Circuit Nodes
+  const circuitNodes = useMemo(() => {
+    return [...Array(30)].map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 1.5 + Math.random() * 3.5,
-      depth: 0.3 + Math.random() * 2, 
-      opacity: 0.15 + Math.random() * 0.45,
-      duration: 6 + Math.random() * 12,
+      size: 2 + Math.random() * 4,
     }));
   }, []);
+
+  const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
 
   if (!mounted) return <div className="fixed inset-0 bg-[#020203] z-[-2]" />;
 
   return (
-    <div className="fixed inset-0 z-[-2] overflow-hidden bg-[#020203] perspective-1000">
+    <div className="fixed inset-0 z-[-2] overflow-hidden bg-[#020203]">
       
-      {/* 1. Base Wallpaper Layer with 3D Tilt */}
+      {/* 1. Cyberpunk City Gradient Base */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#020203] via-[#0a0a1a] to-[#020203]" />
+      
+      {/* 2. Circuit Board Pattern */}
       <motion.div 
-        style={{ 
-          rotateX, 
-          rotateY, 
-          x: translateX, 
-          y: translateY,
-          scale: 1.15
-        }}
-        className="absolute inset-0 z-0 origin-center opacity-40"
-      >
-        <Image 
-          src={heroImage?.imageUrl || "https://picsum.photos/seed/cyber/1920/1080"} 
-          alt="Cyber Background"
-          fill
-          className="object-cover grayscale"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-      </motion.div>
-
-      {/* 2. Interactive 3D Neuron Layer */}
-      <motion.div 
-        style={{ 
-          rotateX, 
-          rotateY, 
-          x: translateX, 
-          y: translateY,
-          scale: 1.05 
-        }}
-        className="absolute inset-0 z-10 origin-center"
+        style={{ rotateX, rotateY, x: translateX, y: translateY, scale: 1.1 }}
+        className="absolute inset-0 opacity-15"
       >
         <svg className="w-full h-full">
           <defs>
-            <radialGradient id="neuronGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-            </radialGradient>
+            <pattern id="circuitGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="hsl(var(--primary))" strokeWidth="0.5" opacity="0.3" />
+              <circle cx="0" cy="0" r="3" fill="hsl(var(--primary))" opacity="0.5" />
+              <circle cx="60" cy="60" r="3" fill="hsl(var(--primary))" opacity="0.5" />
+            </pattern>
           </defs>
+          <rect width="100%" height="100%" fill="url(#circuitGrid)" />
           
-          {/* Parallax Lines (Synapses) */}
-          {neurons.slice(0, 35).map((n, i) => {
-            const next = neurons[(i + 1) % neurons.length];
+          {/* Random Circuit Connections */}
+          {circuitNodes.map((node, i) => {
+            const next = circuitNodes[(i + 3) % circuitNodes.length];
             return (
               <motion.line
-                key={`line-${i}`}
-                x1={`${n.x}%`}
-                y1={`${n.y}%`}
+                key={`conn-${i}`}
+                x1={`${node.x}%`}
+                y1={`${node.y}%`}
                 x2={`${next.x}%`}
                 y2={`${next.y}%`}
-                stroke="hsl(var(--primary))"
-                strokeWidth={0.8 * n.depth}
-                style={{ opacity: n.opacity * 0.6 }}
-                animate={{ 
-                  opacity: [n.opacity * 0.4, n.opacity * 0.8, n.opacity * 0.4],
-                  strokeWidth: [0.8 * n.depth, 1.5 * n.depth, 0.8 * n.depth]
-                }}
-                transition={{ duration: n.duration, repeat: Infinity, ease: "easeInOut" }}
+                stroke="hsl(var(--secondary))"
+                strokeWidth="1"
+                opacity="0.2"
+                animate={{ opacity: [0.1, 0.4, 0.1] }}
+                transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
               />
             );
           })}
-
-          {/* Floating Neuron Nodes */}
-          {neurons.map((n) => (
+          
+          {/* Circuit Nodes */}
+          {circuitNodes.map((node) => (
             <motion.circle
-              key={n.id}
-              cx={`${n.x}%`}
-              cy={`${n.y}%`}
-              r={n.size * n.depth}
-              fill="url(#neuronGlow)"
-              style={{ opacity: n.opacity }}
-              animate={{ 
-                scale: [1, 1.3, 1],
-                opacity: [n.opacity, n.opacity * 2, n.opacity] 
-              }}
-              transition={{ duration: n.duration / 2, repeat: Infinity, ease: "easeInOut" }}
+              key={node.id}
+              cx={`${node.x}%`}
+              cy={`${node.y}%`}
+              r={node.size}
+              fill="hsl(var(--primary))"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.8, 0.3] }}
+              transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, ease: "easeInOut" }}
             />
           ))}
         </svg>
-
-        {/* 3. Central 3D AI Core Object */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.15, 1],
-              opacity: [0.3, 0.5, 0.3] 
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute w-[500px] h-[500px] bg-primary/30 blur-[120px] rounded-full"
-          />
-          
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20 + i * 8, repeat: Infinity, ease: "linear" }}
-              className="absolute border border-primary/30 rounded-full"
-              style={{ 
-                width: 350 + i * 120, 
-                height: 350 + i * 120,
-                rotateX: 65 + i * 15,
-                rotateY: 25 * i
-              }}
-            >
-              <div className="absolute top-0 left-1/2 w-2 h-2 bg-primary shadow-[0_0_15px_hsl(var(--primary))] rounded-full" />
-            </motion.div>
-          ))}
-        </div>
       </motion.div>
 
-      {/* 4. Mouse Dynamic Light Focus */}
+      {/* 3. Matrix Rain */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {matrixRain.map((drop) => (
+          <motion.div
+            key={drop.id}
+            className="absolute top-0 font-mono text-xs md:text-sm"
+            style={{ left: `${drop.left}%`, opacity: drop.opacity }}
+            initial={{ y: '-100vh' }}
+            animate={{ y: '200vh' }}
+            transition={{ duration: drop.duration, delay: drop.delay, repeat: Infinity, ease: 'linear' }}
+          >
+            <div className="flex flex-col items-center gap-0.5">
+              {[...Array(15)].map((_, i) => (
+                <span 
+                  key={i} 
+                  className={i === 0 ? 'text-white' : 'text-primary/70'}
+                  style={{ opacity: 1 - (i * 0.06) }}
+                >
+                  {matrixChars[Math.floor(Math.random() * matrixChars.length)]}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* 4. Central Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <motion.div 
+          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute w-[600px] h-[600px] bg-primary/20 blur-[150px] rounded-full"
+        />
+        <motion.div 
+          animate={{ scale: [0.8, 1.1, 0.8], opacity: [0.15, 0.25, 0.15] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute w-[400px] h-[400px] bg-secondary/20 blur-[120px] rounded-full"
+        />
+      </div>
+
+      {/* 5. Mouse Dynamic Light */}
       <motion.div 
         style={{ x: lightX, y: lightY }}
-        className="absolute w-[1000px] h-[1000px] -translate-x-1/2 -translate-y-1/2 bg-primary/[0.05] rounded-full blur-[150px] z-30 pointer-events-none mix-blend-screen"
+        className="absolute w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 bg-primary/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen"
       />
 
-      {/* 5. CRT Overlay Effects */}
-      <div className="absolute inset-0 z-40 pointer-events-none">
-        <div className="w-full h-full crt-effect opacity-10" />
-        <div className="w-full h-full bg-grid-3d opacity-20" />
+      {/* 6. CRT Scanlines Overlay */}
+      <div className="absolute inset-0 pointer-events-none z-50">
+        <div className="w-full h-full" style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)',
+        }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
       </div>
+
+      {/* 7. Glitch Effect Overlay */}
+      <div className="absolute inset-0 pointer-events-none z-40">
+        <motion.div 
+          className="absolute inset-0 bg-primary/5"
+          animate={{ x: [-2, 2, -2], opacity: [0, 0.05, 0] }}
+          transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 5 }}
+        />
+        <motion.div 
+          className="absolute inset-0 bg-secondary/5"
+          animate={{ x: [2, -2, 2], opacity: [0, 0.05, 0] }}
+          transition={{ duration: 0.3, repeat: Infinity, repeatDelay: 7 }}
+        />
+      </div>
+
     </div>
   );
 }
+

@@ -21,10 +21,24 @@ export default function Home() {
   const [minimizedWindows, setMinimizedWindows] = useState<WindowID[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowID | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleAuthSequence = () => {
+    setIsAuthenticating(true);
+    setTimeout(() => {
+      const allWindows: WindowID[] = ['about', 'skills', 'experience', 'projects'];
+      allWindows.forEach((winId, index) => {
+        setTimeout(() => {
+          handleOpenWindow(winId);
+        }, index * 500);
+      });
+      setIsAuthenticating(false);
+    }, 1500);
+  };
 
   const folders = [
     { id: 'about' as WindowID, name: 'identity.sys', icon: User, color: 'text-primary' },
@@ -82,8 +96,12 @@ export default function Home() {
       <div className="container mx-auto h-screen relative z-10 pointer-events-none">
         
         {/* Hero Section */}
-        <div className="w-full h-full flex items-center justify-center px-6 pointer-events-none">
-          <Hero onStart={() => handleOpenWindow('about')} />
+        <div className="w-full h-full flex items-center justify-center px-6 pointer-events-auto">
+          <Hero 
+            onStart={handleAuthSequence} 
+            isAuthenticating={isAuthenticating}
+            onOpenWindow={handleOpenWindow}
+          />
         </div>
 
         {/* Window Layer */}

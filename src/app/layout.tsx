@@ -3,8 +3,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Synthweave PortFolio | Cybersecurity Expert',
-  description: 'A cinematic portfolio experience for a top-tier Penetration Tester.',
+  title: 'Afrizal | Portofolio',
+  description: 'Website portofolio pribadi yang menampilkan pengalaman, keahlian, dan CV saya sebagai profesional cybersecurity.',
 };
 
 export default function RootLayout({
