@@ -1,73 +1,48 @@
-
 "use client";
 
 import React from 'react';
-import { Code2, Search, Database, Globe, Layers, ShieldCheck } from 'lucide-react';
+import { Search, ShieldCheck, Code2, Globe, Database, Layers } from 'lucide-react';
 
 const skillCategories = [
-  {
-    title: 'Offensive Security',
-    icon: Search,
-    skills: ['Metasploit', 'Burp Suite', 'Nmap', 'SQLmap', 'Empire']
-  },
-  {
-    title: 'Defensive Strategy',
-    icon: ShieldCheck,
-    skills: ['SIEM', 'IDS/IPS', 'Endpoint Protection', 'Firewall Auditing']
-  },
-  {
-    title: 'Development',
-    icon: Code2,
-    skills: ['Python', 'Golang', 'Bash', 'C++', 'React']
-  },
-  {
-    title: 'Cloud & Infrastructure',
-    icon: Globe,
-    skills: ['AWS Security', 'Azure', 'Kubernetes', 'Docker Hardening']
-  },
-  {
-    title: 'Data & Networking',
-    icon: Database,
-    skills: ['PostgreSQL', 'TCP/IP Stack', 'Wireshark', 'OSI Layers']
-  },
-  {
-    title: 'Standards',
-    icon: Layers,
-    skills: ['OWASP Top 10', 'PCI-DSS', 'HIPAA', 'ISO 27001']
-  }
+  { title: 'Offensive', icon: Search, skills: ['Metasploit', 'Burp', 'Nmap', 'SQLmap'] },
+  { title: 'Defensive', icon: ShieldCheck, skills: ['SIEM', 'IDS/IPS', 'EDR', 'Auditing'] },
+  { title: 'Development', icon: Code2, skills: ['Python', 'Golang', 'Rust', 'C++'] },
+  { title: 'Infrastructure', icon: Globe, skills: ['AWS', 'K8s', 'Docker', 'GCP'] },
+  { title: 'Networking', icon: Database, skills: ['TCP/IP', 'Wireshark', 'OSI', 'BGP'] },
+  { title: 'Governance', icon: Layers, skills: ['OWASP', 'PCI-DSS', 'ISO', 'SOC2'] }
 ];
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24 bg-black/20">
+    <section id="skills" className="py-32 relative border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <div className="inline-block text-primary font-bold tracking-widest uppercase text-sm mb-4">Capability</div>
-          <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Technical Arsenal</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            A comprehensive set of tools and methodologies honed through years of practical field experience.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, idx) => (
-            <div key={idx} className="group glass p-8 rounded-2xl hover:bg-white/10 transition-all duration-300">
-              <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-                <category.icon className="w-6 h-6" />
+        <div className="grid lg:grid-cols-12 gap-12 items-start mb-24">
+          <div className="lg:col-span-4">
+            <div className="text-primary font-bold tracking-[0.3em] uppercase text-[10px] mb-4">Capabilities</div>
+            <h2 className="font-headline text-5xl font-bold tracking-tighter mb-6 text-white leading-tight">
+              Technical <br />Architectures.
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              Standardized methodologies for identifying, mitigating, and neutralizing advanced persistent threats.
+            </p>
+          </div>
+          
+          <div className="lg:col-span-8 grid sm:grid-cols-2 md:grid-cols-3 gap-1">
+            {skillCategories.map((category, idx) => (
+              <div key={idx} className="p-8 border border-white/5 hover:bg-white/[0.02] transition-colors group">
+                <category.icon className="w-5 h-5 text-primary mb-6 group-hover:scale-110 transition-transform" />
+                <h3 className="font-bold uppercase tracking-widest text-[11px] mb-4 text-white">{category.title}</h3>
+                <div className="space-y-2">
+                  {category.skills.map((skill, sIdx) => (
+                    <div key={sIdx} className="text-xs text-muted-foreground flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-white/20" />
+                      {skill}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <h3 className="font-headline font-bold text-xl mb-4">{category.title}</h3>
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill, sIdx) => (
-                  <span 
-                    key={sIdx} 
-                    className="px-3 py-1 bg-white/5 rounded-full text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
