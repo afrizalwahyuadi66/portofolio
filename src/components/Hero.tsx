@@ -2,10 +2,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Activity, ChevronRight, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import LinuxWindow from './LinuxWindow';
 
 interface HeroProps {
   onStart?: () => void;
@@ -61,16 +60,19 @@ export default function Hero({ onStart }: HeroProps) {
         </div>
       </motion.div>
 
-      {/* Terminal View on the Right */}
+      {/* Draggable Terminal View on the Right */}
       <div className="relative hidden lg:block perspective-2000">
         <motion.div
+          drag
+          dragMomentum={false}
           initial={{ rotateY: 15, opacity: 0, x: 50 }}
           animate={{ rotateY: 5, opacity: 1, x: 0 }}
+          whileDrag={{ rotateY: 0, scale: 1.02, zIndex: 100 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative z-10"
+          className="relative z-10 cursor-grab active:cursor-grabbing pointer-events-auto"
         >
           <div className="terminal-window bg-black/80 rounded-xl overflow-hidden border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.9)]">
-            <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between">
+            <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between pointer-events-none">
               <div className="flex gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
                 <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
@@ -79,7 +81,7 @@ export default function Hero({ onStart }: HeroProps) {
               <div className="text-[9px] font-mono text-white/40 tracking-widest">/ROOT/SYS/ KERNEL_BOOT.LOG</div>
             </div>
             
-            <div className="p-6 font-mono text-[10px] space-y-4">
+            <div className="p-6 font-mono text-[10px] space-y-4 pointer-events-none select-none">
               <div className="flex gap-3 text-secondary">
                 <Terminal className="w-3 h-3" />
                 <span>[root@afrizal-os] # boot --verbose</span>
