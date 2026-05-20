@@ -1,78 +1,95 @@
-
 "use client";
 
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ShieldCheck, Target, Cpu } from 'lucide-react';
-import LinuxWindow from './LinuxWindow';
+import { ShieldCheck, Target, Cpu, Code } from 'lucide-react';
 
 export default function About() {
   const profileImage = PlaceHolderImages.find(img => img.id === 'profile-pic');
 
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
+    <section id="about" className="py-32 relative overflow-hidden bg-white/[0.01]">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-20 items-center">
+          
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative group"
+            className="relative"
           >
-            <div className="absolute -inset-4 bg-primary/20 rounded-2xl blur-xl group-hover:bg-primary/30 transition-all" />
-            <div className="relative aspect-square rounded-2xl overflow-hidden border border-white/10 grayscale hover:grayscale-0 transition-all duration-700">
+            <div className="absolute -inset-10 bg-primary/10 rounded-full blur-[100px] animate-pulse" />
+            <div className="relative aspect-[4/5] rounded-none border border-white/10 overflow-hidden group">
               <Image 
                 src={profileImage?.imageUrl || "https://picsum.photos/seed/profile/800/800"} 
-                alt="Pentester Profile"
+                alt="Security Profile"
                 fill
-                className="object-cover"
-                data-ai-hint="professional man"
+                className="object-cover grayscale hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                data-ai-hint="hacker profile"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
             </div>
-            <div className="absolute -bottom-6 -right-6 glass p-6 rounded-2xl hidden lg:block border border-white/10">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,0,128,0.3)]">
-                  <ShieldCheck className="w-6 h-6 text-white" />
+            
+            {/* Stats Overlay */}
+            <motion.div 
+              initial={{ x: 50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="absolute -bottom-8 -right-8 glass p-8 shadow-2xl border border-white/10"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-secondary/20 flex items-center justify-center text-secondary">
+                  <ShieldCheck className="w-8 h-8" />
                 </div>
                 <div>
-                  <div className="text-xl font-headline font-bold">120+</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider">Engagements</div>
+                  <div className="text-3xl font-black font-headline">128+</div>
+                  <div className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">Successful Audits</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-block text-accent font-bold tracking-[0.3em] uppercase text-xs mb-4">The Identity</div>
-            <h2 className="font-headline text-4xl md:text-5xl font-bold mb-8 tracking-tight">
-              Ethical Hacker by Choice. <br />
-              <span className="text-muted-foreground">Architect of Security.</span>
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-8 font-mono italic border-l-2 border-primary/20 pl-6">
-              "Di dunia yang serba digital, privasi adalah mitos yang harus kita pertahankan dengan kode. Saya menemukan kerentanan sebelum pihak tak bertanggung jawab melakukannya."
-            </p>
+          <div className="space-y-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="text-secondary font-bold tracking-[0.4em] uppercase text-[10px] mb-6">User Identification</div>
+              <h2 className="text-5xl font-headline font-black tracking-tighter leading-tight mb-8">
+                Architect of <br />Secure Systems.
+              </h2>
+              <p className="text-muted-foreground font-mono leading-relaxed mb-10 italic border-l-2 border-primary/20 pl-6">
+                "Di dunia di mana data adalah mata uang baru, saya adalah penjaga gerbang yang memastikan hanya cahaya yang boleh masuk, dan kegelapan tetap di luar."
+              </p>
+            </motion.div>
             
             <div className="grid sm:grid-cols-2 gap-6">
-              <div className="glass p-5 rounded-xl border border-white/5 hover:border-primary/50 transition-colors">
-                <Target className="w-8 h-8 text-primary mb-3" />
-                <h4 className="font-headline font-bold mb-1">Precision Testing</h4>
-                <p className="text-sm text-muted-foreground">Detailed vulnerability assessments with zero false positives.</p>
-              </div>
-              <div className="glass p-5 rounded-xl border border-white/5 hover:border-accent/50 transition-colors">
-                <Cpu className="w-8 h-8 text-accent mb-3" />
-                <h4 className="font-headline font-bold mb-1">Custom Exploit Dev</h4>
-                <p className="text-sm text-muted-foreground">Building bespoke tools for specific attack surfaces.</p>
-              </div>
+              {[
+                { title: 'Red Teaming', icon: Target, desc: 'Advanced offensive security simulation.' },
+                { title: 'Secure Coding', icon: Code, desc: 'Hardening applications from the inside out.' },
+                { title: 'Cloud Armor', icon: Cpu, desc: 'Scalable infrastructure defense strategies.' },
+                { title: 'Malware Lab', icon: ShieldCheck, desc: 'Reverse engineering and threat research.' }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="glass p-6 group hover:bg-primary/5 transition-all cursor-crosshair"
+                >
+                  <item.icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                  <h4 className="font-bold text-sm uppercase tracking-widest mb-2">{item.title}</h4>
+                  <p className="text-xs text-muted-foreground">{item.desc}</p>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
+          </div>
+
         </div>
       </div>
     </section>
