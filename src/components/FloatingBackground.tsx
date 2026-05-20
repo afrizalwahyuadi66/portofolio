@@ -1,9 +1,27 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function FloatingBackground() {
+  const [mounted, setMounted] = useState(false);
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    setMounted(true);
+    // Generate particle data only on the client
+    const newParticles = [...Array(5)].map((_, i) => ({
+      id: i,
+      xInitial: Math.random() * 100 + "%",
+      xAnimate: (Math.random() * 100 - 50) + "%",
+      duration: Math.random() * 10 + 5,
+      delay: i * 2,
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  if (!mounted) return <div className="fixed inset-0 z-[-1] bg-[#020203]" />;
+
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#020203]">
       {/* 3D Animated Grid */}
@@ -30,19 +48,19 @@ export default function FloatingBackground() {
       />
 
       {/* Floating High-Tech Particles */}
-      {[...Array(5)].map((_, i) => (
+      {particles.map((p) => (
         <motion.div
-          key={i}
-          initial={{ opacity: 0, x: Math.random() * 100 + "%", y: "100%" }}
+          key={p.id}
+          initial={{ opacity: 0, x: p.xInitial, y: "100%" }}
           animate={{ 
             opacity: [0, 0.4, 0],
             y: "-10%",
-            x: (Math.random() * 100 - 50) + "%" 
+            x: p.xAnimate 
           }}
           transition={{ 
-            duration: Math.random() * 10 + 5, 
+            duration: p.duration, 
             repeat: Infinity, 
-            delay: i * 2,
+            delay: p.delay,
             ease: "linear" 
           }}
           className="absolute w-px h-20 bg-gradient-to-t from-primary/0 via-primary/40 to-primary/0"
