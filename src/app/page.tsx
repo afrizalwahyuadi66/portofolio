@@ -21,8 +21,10 @@ export default function Home() {
   const [minimizedWindows, setMinimizedWindows] = useState<WindowID[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowID | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -67,6 +69,8 @@ export default function Home() {
     setActiveWindow(winId);
   };
 
+  if (!mounted) return null;
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
       <FloatingBackground />
@@ -80,16 +84,16 @@ export default function Home() {
       
       <div className="container mx-auto h-screen relative z-10">
         
-        {/* Sidebar Icons Container - Optimized for Desktop & Mobile */}
+        {/* Sidebar Icons Container - Optimized for Desktop & Mobile Precision */}
         <motion.div 
-          initial={{ opacity: 0, x: isMobile ? 0 : -50, y: isMobile ? 50 : 0 }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
+          initial={{ opacity: 0, x: isMobile ? 0 : -100 }}
+          animate={{ opacity: 1, x: 0 }}
           className={cn(
-            "fixed z-[60] bg-black/60 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500",
-            // Desktop: Left vertical capsule
-            "lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:flex-col lg:gap-8 lg:px-5 lg:py-10 lg:rounded-[3rem]",
-            // Mobile: Bottom horizontal dock
-            "left-4 right-4 bottom-14 flex flex-row justify-around gap-2 px-4 py-3 rounded-2xl lg:hidden"
+            "fixed z-[60] bg-black/60 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex",
+            // Desktop: Left vertical capsule (Precise Centering)
+            "lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:flex-col lg:gap-8 lg:px-5 lg:py-10 lg:rounded-[3rem] lg:w-auto lg:h-auto lg:bottom-auto lg:right-auto",
+            // Mobile: Bottom horizontal dock (Android Style)
+            "left-4 right-4 bottom-14 flex-row justify-around gap-2 px-4 py-3 rounded-2xl lg:flex-col"
           )}
         >
           {folders.map((folder) => (
@@ -113,8 +117,8 @@ export default function Home() {
           ))}
         </motion.div>
 
-        {/* Hero Section - Padded to avoid sidebar on desktop */}
-        <div className="w-full h-full flex items-center justify-center lg:pl-32">
+        {/* Hero Section - Padded to avoid sidebar on desktop across all resolutions */}
+        <div className="w-full h-full flex items-center justify-center lg:pl-40 px-6">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
 
@@ -127,7 +131,6 @@ export default function Home() {
                 title={folders.find(f => f.id === winId)?.name || 'Terminal'} 
                 className={cn(
                   "w-[90vw] lg:w-full lg:max-w-5xl h-[60vh] lg:h-[75vh]",
-                  // Center window on initial open
                   "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                 )}
                 onClose={() => handleCloseWindow(winId)}
