@@ -84,15 +84,15 @@ export default function Home() {
       
       <div className="container mx-auto h-screen relative z-10">
         
-        {/* Sidebar Icons Container - Optimized for Multi-Resolution Precision */}
+        {/* Sidebar Icons - Precision Repositioning */}
         <motion.div 
           initial={{ opacity: 0, x: isMobile ? 0 : -100 }}
           animate={{ opacity: 1, x: 0 }}
           className={cn(
             "fixed z-[60] bg-black/60 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex",
-            // Desktop: Left vertical capsule (Precise Vertical Centering)
-            "lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:flex-col lg:gap-10 lg:px-6 lg:py-12 lg:rounded-[3.5rem] lg:w-auto lg:h-auto lg:bottom-auto lg:right-auto",
-            // Mobile: Bottom horizontal dock (Android Style)
+            // Desktop: High-Left Vertical Capsule (Top-Aligned for Visibility)
+            "lg:left-10 lg:top-32 lg:flex-col lg:gap-10 lg:px-6 lg:py-12 lg:rounded-[3.5rem] lg:w-auto lg:h-auto lg:bottom-auto lg:right-auto",
+            // Mobile: Bottom horizontal dock
             "left-4 right-4 bottom-14 flex-row justify-around gap-2 px-4 py-3 rounded-2xl lg:flex-col"
           )}
         >
@@ -105,7 +105,7 @@ export default function Home() {
               className="flex flex-col items-center gap-2 lg:gap-4 group"
             >
               <div className={cn(
-                "p-3.5 lg:p-5 rounded-2xl lg:rounded-3xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
+                "p-4 lg:p-5 rounded-2xl lg:rounded-3xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
                 openWindows.includes(folder.id) && "border-primary/30 bg-primary/5 shadow-[0_0_20px_rgba(0,255,255,0.15)]"
               )}>
                 <folder.icon className={cn("w-6 h-6 lg:w-8 lg:h-8", folder.color)} />
@@ -117,7 +117,7 @@ export default function Home() {
           ))}
         </motion.div>
 
-        {/* Hero Section - Padded to avoid sidebar on desktop across all resolutions */}
+        {/* Hero Section */}
         <div className="w-full h-full flex items-center justify-center lg:pl-48 px-6">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
