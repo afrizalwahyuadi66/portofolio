@@ -20,15 +20,10 @@ export default function Home() {
   const [openWindows, setOpenWindows] = useState<WindowID[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<WindowID[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowID | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const folders = [
@@ -72,7 +67,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-transparent">
+    <main className="relative min-h-screen overflow-hidden">
       <FloatingBackground />
       
       <Navigation 
@@ -86,41 +81,8 @@ export default function Home() {
       
       <div className="container mx-auto h-screen relative z-10 pointer-events-none">
         
-        {/* Sidebar Navigasi - Reposisi Presisi Desktop (Lebih Tinggi) */}
-        <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className={cn(
-            "fixed z-[60] bg-black/40 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex pointer-events-auto",
-            // Desktop: Locked Left Center - Adjusted to be much higher (top-[30%])
-            "lg:left-8 lg:top-[30%] lg:-translate-y-0 lg:bottom-auto lg:flex-col lg:gap-6 lg:p-5 lg:rounded-[3rem] lg:w-auto",
-            // Mobile: Bottom horizontal dock
-            "left-4 right-4 bottom-14 flex-row justify-around gap-2 p-3 rounded-2xl lg:top-auto lg:bottom-auto lg:right-auto"
-          )}
-        >
-          {folders.map((folder) => (
-            <motion.button
-              key={folder.id}
-              whileHover={{ scale: 1.15, x: isMobile ? 0 : 5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-2 group"
-            >
-              <div className={cn(
-                "p-3.5 lg:p-5 rounded-2xl lg:rounded-[2rem] bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
-                openWindows.includes(folder.id) && !minimizedWindows.includes(folder.id) && "border-primary/40 bg-primary/5 shadow-[0_0_30px_rgba(0,255,255,0.2)]"
-              )}>
-                <folder.icon className={cn("w-6 h-6 lg:w-8 lg:h-8", folder.color)} />
-              </div>
-              <span className="text-[7px] lg:text-[9px] font-mono font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-primary transition-colors whitespace-nowrap">
-                {folder.name}
-              </span>
-            </motion.button>
-          ))}
-        </motion.div>
-
         {/* Hero Section */}
-        <div className="w-full h-full flex items-center justify-center lg:pl-32 px-6 pointer-events-none">
+        <div className="w-full h-full flex items-center justify-center px-6 pointer-events-none">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
 
