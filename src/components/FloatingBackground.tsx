@@ -9,6 +9,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 export default function FloatingBackground() {
   const [mounted, setMounted] = useState(false);
   const [particles, setParticles] = useState<any[]>([]);
+  const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
   
   const heroBg = PlaceHolderImages.find(img => img.id === 'hero-bg');
 
@@ -21,7 +22,7 @@ export default function FloatingBackground() {
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
-  // Dynamic transforms for 3D elements
+  // Define all transforms at top level to satisfy Rules of Hooks
   const bgX = useTransform(smoothMouseX, [-500, 500], [20, -20]);
   const bgY = useTransform(smoothMouseY, [-500, 500], [20, -20]);
   const bgRotateX = useTransform(smoothMouseY, [-500, 500], [5, -5]);
@@ -30,15 +31,25 @@ export default function FloatingBackground() {
   const gridTiltX = useTransform(smoothMouseY, [-500, 500], [65, 55]);
   const gridTiltY = useTransform(smoothMouseX, [-500, 500], [-10, 10]);
 
+  // Transform for the interactive light source, using state-based window size to avoid direct window access in hook
+  const lightX = useTransform(mouseX, (v) => v + windowSize.width / 2 - 400);
+  const lightY = useTransform(mouseY, (v) => v + windowSize.height / 2 - 400);
+
   useEffect(() => {
     setMounted(true);
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX - window.innerWidth / 2);
       mouseY.set(e.clientY - window.innerHeight / 2);
     };
 
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
 
     // Generate tech particles
     const newParticles = [...Array(20)].map((_, i) => ({
@@ -52,9 +63,13 @@ export default function FloatingBackground() {
     }));
     setParticles(newParticles);
 
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [mouseX, mouseY]);
 
+  // Hook must be called before this return
   if (!mounted) return <div className="fixed inset-0 z-[-1] bg-[#020203]" />;
 
   return (
@@ -77,6 +92,7 @@ export default function FloatingBackground() {
           fill
           className="object-cover"
           priority
+          data-ai-hint="cyber security"
         />
         {/* Dark overlay to keep UI readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#020203]/80 via-transparent to-[#020203]/90" />
@@ -98,8 +114,8 @@ export default function FloatingBackground() {
       {/* 3. Interactive Mouse Light Source */}
       <motion.div 
         style={{ 
-          x: useTransform(mouseX, (v) => v + window.innerWidth / 2 - 400),
-          y: useTransform(mouseY, (v) => v + window.innerHeight / 2 - 400),
+          x: lightX,
+          y: lightY,
         }}
         className="absolute w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] z-20 pointer-events-none opacity-60 mix-blend-screen"
       />
