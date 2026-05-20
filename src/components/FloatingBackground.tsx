@@ -18,13 +18,13 @@ export default function FloatingBackground() {
   const smoothX = useSpring(mouseX, { damping: 50, stiffness: 100 });
   const smoothY = useSpring(mouseY, { damping: 50, stiffness: 100 });
 
-  // 3D Perspective Transforms for the scene
+  // 3D Perspective Transforms
   const rotateX = useTransform(smoothY, [-500, 500], [7, -7]);
   const rotateY = useTransform(smoothX, [-500, 500], [-7, 7]);
   const translateX = useTransform(smoothX, [-500, 500], [25, -25]);
   const translateY = useTransform(smoothY, [-500, 500], [25, -25]);
 
-  // Lighting transforms
+  // Lighting transforms (safe for SSR)
   const lightX = useTransform(smoothX, (v) => v + (typeof window !== 'undefined' ? window.innerWidth / 2 : 0));
   const lightY = useTransform(smoothY, (v) => v + (typeof window !== 'undefined' ? window.innerHeight / 2 : 0));
 

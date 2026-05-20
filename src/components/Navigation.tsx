@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Cpu, Wifi, Battery, Clock, Terminal as TerminalIcon, Layout, FolderOpen } from 'lucide-react';
+import { Cpu, Wifi, Battery, Clock, Terminal as TerminalIcon, Layout } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NavigationProps {
@@ -54,7 +54,7 @@ export default function Navigation({
 
         <div className="h-4 w-px bg-white/10 hidden lg:block" />
 
-        {/* Quick Launch Menu (from Sidebar) - High Precision Desktop Menu */}
+        {/* Quick Launch Menu (from Sidebar) */}
         <div className="hidden lg:flex items-center gap-4 shrink-0 bg-white/5 px-4 py-1 rounded-full border border-white/10">
           {folders.map((folder) => (
             <button
