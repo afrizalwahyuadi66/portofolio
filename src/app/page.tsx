@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -72,11 +71,11 @@ export default function Home() {
       
       <div className="container mx-auto h-full pt-16 relative flex items-center">
         
-        {/* Desktop Sidebar Icons - Positioned Higher and more Compact */}
+        {/* Desktop Sidebar Icons - Re-positioned and Styled */}
         <motion.div 
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          className="fixed left-6 top-[42%] -translate-y-1/2 hidden md:grid grid-cols-1 gap-8 z-40 bg-black/40 backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl"
+          className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:grid grid-cols-1 gap-6 z-40 bg-black/40 backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl"
         >
           {folders.map((folder) => (
             <motion.button
@@ -84,10 +83,10 @@ export default function Home() {
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-2 group"
+              className="flex flex-col items-center gap-1.5 group"
             >
               <div className={cn(
-                "p-3.5 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
+                "p-3 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
                 openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
               )}>
                 <folder.icon className={`w-5 h-5 ${folder.color} relative z-10`} />

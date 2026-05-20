@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -16,6 +15,7 @@ interface LinuxWindowProps {
   isMinimized?: boolean;
   isActive?: boolean;
   onFocus?: () => void;
+  style?: React.CSSProperties;
 }
 
 export default function LinuxWindow({ 
@@ -27,7 +27,8 @@ export default function LinuxWindow({
   onMinimize,
   isMinimized,
   isActive,
-  onFocus
+  onFocus,
+  style
 }: LinuxWindowProps) {
   
   if (isMinimized) return null;
@@ -46,7 +47,7 @@ export default function LinuxWindow({
         isActive ? "z-50 shadow-[0_0_50px_rgba(0,255,255,0.2)]" : "z-40 grayscale-[0.5] opacity-90",
         className
       )}
-      style={{ minWidth: '320px', minHeight: '200px' }}
+      style={{ ...style, minWidth: '320px', minHeight: '200px' }}
     >
       {/* Window Header - Drag Handle */}
       <div className="terminal-header shrink-0 cursor-grab active:cursor-grabbing">

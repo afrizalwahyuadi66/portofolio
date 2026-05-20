@@ -10,7 +10,7 @@
     --card-foreground: 180 100% 95%;
     --popover: 240 10% 2%;
     --popover-foreground: 180 100% 90%;
-    --primary: 180 100% 50%; /* Cyan */
+    --primary: 180 100% 50%; /* Electric Cyan */
     --primary-foreground: 180 100% 5%;
     --secondary: 142 70% 50%; /* Matrix Green */
     --secondary-foreground: 0 0% 100%;
@@ -23,7 +23,7 @@
     --border: 240 5% 15%;
     --input: 240 5% 15%;
     --ring: 180 100% 50%;
-    --radius: 0rem;
+    --radius: 0.5rem;
   }
 }
 
@@ -52,13 +52,13 @@
 }
 
 .terminal-header {
-  @apply bg-white/5 border-b border-white/10 px-4 py-2 flex items-center justify-between cursor-default select-none;
+  @apply bg-white/5 border-b border-white/10 px-4 py-2.5 flex items-center justify-between cursor-default select-none;
 }
 
 .dot { @apply w-3 h-3 rounded-full flex items-center justify-center transition-all; }
 .dot-red { @apply bg-[#ff5f56] hover:bg-[#ff5f56]/80; }
-.dot-yellow { @apply bg-[#ffbd2e]; }
-.dot-green { @apply bg-[#27c93f]; }
+.dot-yellow { @apply bg-[#ffbd2e] hover:bg-[#ffbd2e]/80; }
+.dot-green { @apply bg-[#27c93f] hover:bg-[#27c93f]/80; }
 
 .crt-effect::after {
   content: " ";
@@ -72,7 +72,7 @@
   z-index: 10;
   background-size: 100% 3px, 3px 100%;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.15;
 }
 
 .glow-text {
@@ -91,4 +91,12 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-primary/20 rounded-full hover:bg-primary/40;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
