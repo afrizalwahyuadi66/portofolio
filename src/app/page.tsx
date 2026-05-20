@@ -84,35 +84,35 @@ export default function Home() {
         folders={folders}
       />
       
-      <div className="container mx-auto h-screen relative z-10">
+      <div className="container mx-auto h-screen relative z-10 pointer-events-none">
         
-        {/* Sidebar Icons - Precision Repositioning */}
+        {/* Sidebar Navigasi - Presisi Kiri */}
         <motion.div 
-          initial={{ opacity: 0, x: isMobile ? 0 : -100 }}
+          initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           className={cn(
-            "fixed z-[60] bg-black/60 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex",
-            // Desktop: High-Left Vertical Capsule
-            "lg:left-10 lg:top-32 lg:flex-col lg:gap-8 lg:px-6 lg:py-10 lg:rounded-[3rem] lg:w-auto",
+            "fixed z-[60] bg-black/40 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex pointer-events-auto",
+            // Desktop: Locked Left Center
+            "lg:left-8 lg:top-1/2 lg:-translate-y-1/2 lg:flex-col lg:gap-6 lg:p-5 lg:rounded-[3rem] lg:w-auto",
             // Mobile: Bottom horizontal dock
-            "left-4 right-4 bottom-14 flex-row justify-around gap-2 px-4 py-3 rounded-2xl lg:flex-col"
+            "left-4 right-4 bottom-14 flex-row justify-around gap-2 p-3 rounded-2xl lg:bottom-auto lg:right-auto"
           )}
         >
           {folders.map((folder) => (
             <motion.button
               key={folder.id}
-              whileHover={{ scale: 1.2, x: isMobile ? 0 : 10 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.15, x: isMobile ? 0 : 5 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-2 lg:gap-3 group"
+              className="flex flex-col items-center gap-2 group"
             >
               <div className={cn(
-                "p-4 lg:p-6 rounded-2xl lg:rounded-3xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
+                "p-3.5 lg:p-5 rounded-2xl lg:rounded-[2rem] bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
                 openWindows.includes(folder.id) && !minimizedWindows.includes(folder.id) && "border-primary/40 bg-primary/5 shadow-[0_0_30px_rgba(0,255,255,0.2)]"
               )}>
-                <folder.icon className={cn("w-6 h-6 lg:w-9 lg:h-9", folder.color)} />
+                <folder.icon className={cn("w-6 h-6 lg:w-8 lg:h-8", folder.color)} />
               </div>
-              <span className="text-[7px] lg:text-[10px] font-mono font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-primary transition-colors whitespace-nowrap">
+              <span className="text-[7px] lg:text-[9px] font-mono font-black uppercase tracking-[0.2em] text-white/40 group-hover:text-primary transition-colors whitespace-nowrap">
                 {folder.name}
               </span>
             </motion.button>
@@ -120,7 +120,7 @@ export default function Home() {
         </motion.div>
 
         {/* Hero Section */}
-        <div className="w-full h-full flex items-center justify-center lg:pl-56 px-6">
+        <div className="w-full h-full flex items-center justify-center lg:pl-32 px-6 pointer-events-none">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
 

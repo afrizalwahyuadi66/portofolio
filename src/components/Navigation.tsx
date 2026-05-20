@@ -41,7 +41,7 @@ export default function Navigation({
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black/90 backdrop-blur-xl border-b border-white/10 h-10 flex items-center px-4 overflow-hidden">
+    <nav className="fixed top-0 left-0 right-0 z-[110] bg-black/90 backdrop-blur-xl border-b border-white/10 h-10 flex items-center px-4 overflow-hidden">
       <div className="flex items-center gap-4 lg:gap-8 w-full">
         
         {/* OS Logo & Branding */}
@@ -54,16 +54,16 @@ export default function Navigation({
 
         <div className="h-4 w-px bg-white/10 hidden lg:block" />
 
-        {/* Quick Launch Menu (from Sidebar) */}
-        <div className="hidden lg:flex items-center gap-4 shrink-0">
+        {/* Quick Launch Menu (from Sidebar) - High Precision Desktop Menu */}
+        <div className="hidden lg:flex items-center gap-4 shrink-0 bg-white/5 px-4 py-1 rounded-full border border-white/10">
           {folders.map((folder) => (
             <button
               key={`nav-${folder.id}`}
               onClick={() => onOpenWindow(folder.id)}
-              className="group flex items-center gap-2 px-2 py-1 hover:bg-white/5 rounded transition-all"
+              className="group flex items-center gap-2 hover:bg-white/5 rounded px-2 transition-all"
             >
-              <folder.icon className={cn("w-3.5 h-3.5", folder.color, "group-hover:scale-110 transition-transform")} />
-              <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
+              <folder.icon className={cn("w-3 h-3", folder.color, "group-hover:scale-110 transition-transform")} />
+              <span className="text-[8px] font-mono font-black uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
                 {folder.name.split('.')[0]}
               </span>
             </button>
