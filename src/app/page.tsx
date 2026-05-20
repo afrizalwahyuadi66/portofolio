@@ -72,11 +72,11 @@ export default function Home() {
       
       <div className="container mx-auto h-full pt-16 relative flex items-center">
         
-        {/* Desktop Sidebar Icons - Always Visible */}
+        {/* Desktop Sidebar Icons - Positioned Higher and more Compact */}
         <motion.div 
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:grid grid-cols-1 gap-12 z-40 bg-black/20 backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl"
+          className="fixed left-6 top-[42%] -translate-y-1/2 hidden md:grid grid-cols-1 gap-8 z-40 bg-black/40 backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl"
         >
           {folders.map((folder) => (
             <motion.button
@@ -87,13 +87,13 @@ export default function Home() {
               className="flex flex-col items-center gap-2 group"
             >
               <div className={cn(
-                "p-4 rounded-xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
+                "p-3.5 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
                 openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
               )}>
-                <folder.icon className={`w-6 h-6 ${folder.color} relative z-10`} />
+                <folder.icon className={`w-5 h-5 ${folder.color} relative z-10`} />
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">
+              <span className="text-[7px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">
                 {folder.name}
               </span>
             </motion.button>

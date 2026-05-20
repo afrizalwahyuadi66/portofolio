@@ -51,7 +51,7 @@ export default function Hero({ onStart }: HeroProps) {
       
       setTimeout(() => {
         onStart?.();
-        setMode('intro'); // Reset to intro for playing again
+        setMode('intro'); // Reset for visual simulation
         setUsername('');
         setPassword('');
       }, 2000);
@@ -63,7 +63,7 @@ export default function Hero({ onStart }: HeroProps) {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto md:pl-20 px-6">
+    <div className="grid lg:grid-cols-2 gap-12 items-center w-full max-w-7xl mx-auto md:pl-28 px-6">
       <motion.div 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
