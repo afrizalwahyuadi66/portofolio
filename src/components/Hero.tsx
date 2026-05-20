@@ -1,9 +1,9 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Activity, ChevronRight, Terminal, Lock, User as UserIcon } from 'lucide-react';
+import { Activity, ChevronRight, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LinuxWindow from './LinuxWindow';
 
@@ -44,15 +44,16 @@ export default function Hero({ onStart }: HeroProps) {
         `root@afrizal-os: login correct`,
         `[ OK ] Loading desktop environment`,
         `[ OK ] Mounting /root/sys/identity`,
-        `[ OK ] Establishing secure uplink`,
         `----------------------------------------`,
         `WELCOME TO AFRIZAL.OS v4.0.2`,
-        `Authorized access only. All activities logged.`,
         `----------------------------------------`
       ]);
       
       setTimeout(() => {
         onStart?.();
+        setMode('intro'); // Reset to intro for playing again
+        setUsername('');
+        setPassword('');
       }, 2000);
     } else {
       setTerminalLogs(prev => [...prev, 'Login incorrect. Hint: root/root', '']);
@@ -89,7 +90,7 @@ export default function Hero({ onStart }: HeroProps) {
               </h1>
               <div className="h-1 w-24 bg-primary" />
               <p className="max-w-lg text-lg text-muted-foreground font-mono leading-relaxed opacity-80 border-l-2 border-white/10 pl-8">
-                Membangun benteng digital melalui penetrasi tingkat tinggi. Lakukan otentikasi kernel untuk mengakses data src.
+                Membangun benteng digital melalui penetrasi tingkat tinggi. Lakukan otentikasi kernel untuk mengekstrak data src.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Button 
@@ -181,7 +182,7 @@ export default function Hero({ onStart }: HeroProps) {
                 <div className="text-secondary/70">[ 0.002451] x86/fpu: Supporting XSAVE feature 0x001</div>
                 <div>[ 0.458210] Freeing SMP alternatives memory...</div>
                 <div className="text-accent/70">[ 1.254821] Initializing Cryptographic Modules...</div>
-                <div className="text-primary/70">[ 2.145892] Mounting: /dev/sda1 {"->"} /root/sys</div>
+                <div className="text-primary/70">[ 2.145892] Mounting: /dev/sda1 { "->" } /root/sys</div>
                 <div>[ 3.842109] Daemon: Scanning for vulnerabilities...</div>
                 <div className="animate-pulse">[ ******* ] Waiting for user authentication...</div>
               </div>
