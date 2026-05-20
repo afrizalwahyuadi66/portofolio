@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 type WindowID = 'about' | 'skills' | 'experience' | 'projects';
 
 export default function Home() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [openWindows, setOpenWindows] = useState<WindowID[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<WindowID[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowID | null>(null);
@@ -32,7 +33,6 @@ export default function Home() {
     if (!openWindows.includes(id)) {
       setOpenWindows(prev => [...prev, id]);
     }
-    // If it was minimized, restore it
     if (minimizedWindows.includes(id)) {
       setMinimizedWindows(prev => prev.filter(w => w !== id));
     }
@@ -60,6 +60,12 @@ export default function Home() {
     setActiveWindow(winId);
   };
 
+  const handleStart = () => {
+    setIsAuthorized(true);
+    // Auto open about after login
+    setTimeout(() => handleOpenWindow('about'), 500);
+  };
+
   return (
     <main className="relative h-screen overflow-hidden bg-[#020203]">
       <FloatingBackground />
@@ -73,34 +79,49 @@ export default function Home() {
       
       <div className="container mx-auto h-full pt-16 relative flex items-center">
         
-        {/* Desktop Sidebar Icons */}
-        <div className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:grid grid-cols-1 gap-12 z-40 bg-black/20 backdrop-blur-md p-4 rounded-3xl border border-white/5">
-          {folders.map((folder) => (
-            <motion.button
-              key={folder.id}
-              whileHover={{ scale: 1.1, x: 5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-2 group"
+        {/* Desktop Sidebar Icons - Only show if authorized */}
+        <AnimatePresence>
+          {isAuthorized && (
+            <motion.div 
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:grid grid-cols-1 gap-12 z-40 bg-black/20 backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl"
             >
-              <div className={cn(
-                "p-4 rounded-xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
-                openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
-              )}>
-                <folder.icon className={`w-6 h-6 ${folder.color} relative z-10`} />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">
-                {folder.name}
-              </span>
-            </motion.button>
-          ))}
-        </div>
+              {folders.map((folder) => (
+                <motion.button
+                  key={folder.id}
+                  whileHover={{ scale: 1.1, x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleOpenWindow(folder.id)}
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <div className={cn(
+                    "p-4 rounded-xl bg-white/5 border border-white/10 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all shadow-xl relative overflow-hidden",
+                    openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
+                  )}>
+                    <folder.icon className={`w-6 h-6 ${folder.color} relative z-10`} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-white/40 group-hover:text-primary transition-colors">
+                    {folder.name}
+                  </span>
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Hero Section - Always in Background */}
-        <div className="w-full h-full flex items-center justify-center overflow-hidden">
-          <Hero onStart={() => handleOpenWindow('about')} />
-        </div>
+        {/* Hero Section / Login Terminal */}
+        {!isAuthorized ? (
+          <div className="w-full h-full flex items-center justify-center overflow-hidden">
+            <Hero onStart={handleStart} />
+          </div>
+        ) : (
+          <div className="w-full h-full relative flex items-center justify-center pointer-events-none opacity-20">
+             {/* Background decoration for authorized state */}
+             <div className="text-[15vw] font-black text-white/5 select-none font-headline tracking-tighter">AFRIZAL_OS</div>
+          </div>
+        )}
 
         {/* Dynamic Window Layer */}
         <div className="fixed inset-0 pointer-events-none z-50 pt-20 px-8 flex items-center justify-center">
@@ -117,8 +138,6 @@ export default function Home() {
                 onFocus={() => setActiveWindow(winId)}
                 style={{ 
                   zIndex: activeWindow === winId ? 60 : 50 + index,
-                  marginTop: index * 20 + 'px',
-                  marginLeft: index * 20 + 'px'
                 }}
               >
                 {winId === 'about' && <About />}
@@ -135,12 +154,12 @@ export default function Home() {
       {/* OS System Footer */}
       <div className="fixed bottom-0 left-0 right-0 h-10 bg-black/95 border-t border-white/10 flex items-center px-6 justify-between text-[9px] font-mono text-muted-foreground z-[100] backdrop-blur-xl">
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-primary">
-            <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
-            <span className="font-bold tracking-widest">SYSTEM: ONLINE</span>
+          <div className={cn("flex items-center gap-2", isAuthorized ? "text-primary" : "text-yellow-500")}>
+            <span className={cn("w-2 h-2 rounded-full animate-pulse shadow-lg", isAuthorized ? "bg-primary shadow-primary/50" : "bg-yellow-500 shadow-yellow-500/50")} />
+            <span className="font-bold tracking-widest uppercase">SYSTEM: {isAuthorized ? 'ONLINE' : 'LOCKED'}</span>
           </div>
           <div className="hidden sm:block opacity-50 uppercase tracking-tighter">
-            PATH: /root/sys/{activeWindow || 'desktop'}
+            PATH: {isAuthorized ? `/root/sys/${activeWindow || 'desktop'}` : '/boot/auth'}
           </div>
         </div>
         
