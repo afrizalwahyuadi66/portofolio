@@ -1,49 +1,54 @@
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function FloatingBackground() {
   const [mounted, setMounted] = useState(false);
   const [particles, setParticles] = useState<any[]>([]);
+  
+  const heroBg = PlaceHolderImages.find(img => img.id === 'hero-bg');
 
-  // Mouse tracking for parallax
+  // Mouse tracking for high-fidelity parallax
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth springs for fluid movement
-  const springConfig = { damping: 25, stiffness: 150 };
+  // Smooth springs for professional "weighty" feel
+  const springConfig = { damping: 30, stiffness: 100 };
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
-  // Transform values for parallax layers
-  const gridRotateX = useTransform(smoothMouseY, [-500, 500], [25, 15]);
-  const gridRotateY = useTransform(smoothMouseX, [-500, 500], [-5, 5]);
-  const blobX1 = useTransform(smoothMouseX, [-500, 500], [50, -50]);
-  const blobY1 = useTransform(smoothMouseY, [-500, 500], [50, -50]);
-  const blobX2 = useTransform(smoothMouseX, [-500, 500], [-30, 30]);
-  const blobY2 = useTransform(smoothMouseY, [-500, 500], [-30, 30]);
+  // Dynamic transforms for 3D elements
+  const bgX = useTransform(smoothMouseX, [-500, 500], [20, -20]);
+  const bgY = useTransform(smoothMouseY, [-500, 500], [20, -20]);
+  const bgRotateX = useTransform(smoothMouseY, [-500, 500], [5, -5]);
+  const bgRotateY = useTransform(smoothMouseX, [-500, 500], [-5, 5]);
+
+  const gridTiltX = useTransform(smoothMouseY, [-500, 500], [65, 55]);
+  const gridTiltY = useTransform(smoothMouseX, [-500, 500], [-10, 10]);
 
   useEffect(() => {
     setMounted(true);
     
     const handleMouseMove = (e: MouseEvent) => {
-      // Calculate mouse position relative to center
       mouseX.set(e.clientX - window.innerWidth / 2);
       mouseY.set(e.clientY - window.innerHeight / 2);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Generate particle data
-    const newParticles = [...Array(15)].map((_, i) => ({
+    // Generate tech particles
+    const newParticles = [...Array(20)].map((_, i) => ({
       id: i,
-      xInitial: Math.random() * 100 + "%",
-      xAnimate: (Math.random() * 10 - 5) + "%",
-      duration: Math.random() * 15 + 10,
-      delay: Math.random() * 10,
-      height: Math.random() * 100 + 50,
-      opacity: Math.random() * 0.3 + 0.1
+      left: Math.random() * 100 + "%",
+      top: Math.random() * 100 + "%",
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 20 + 10,
+      delay: Math.random() * -20,
+      opacity: Math.random() * 0.5 + 0.1
     }));
     setParticles(newParticles);
 
@@ -53,82 +58,81 @@ export default function FloatingBackground() {
   if (!mounted) return <div className="fixed inset-0 z-[-1] bg-[#020203]" />;
 
   return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#020203]">
-      {/* 3D Animated Grid Layer with Parallax */}
+    <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#020203] perspective-1000">
+      
+      {/* 1. Base Wallpaper Layer with 3D Parallax */}
       <motion.div 
         style={{ 
-          rotateX: gridRotateX,
-          rotateY: gridRotateY,
+          x: bgX, 
+          y: bgY, 
+          rotateX: bgRotateX, 
+          rotateY: bgRotateY,
+          scale: 1.1
         }}
-        className="absolute inset-0 perspective-2000 origin-center scale-[1.6]"
+        className="absolute inset-0 z-0 opacity-40 grayscale"
       >
-        <motion.div 
-          animate={{ 
-            backgroundPositionY: ['0px', '100px'],
-          }}
-          transition={{ 
-            duration: 10, 
-            repeat: Infinity, 
-            ease: "linear" 
-          }}
-          className="absolute inset-0 bg-grid-3d opacity-[0.15] border-t border-primary/20" 
+        <Image 
+          src={heroBg?.imageUrl || "https://picsum.photos/seed/cyber1/1920/1080"}
+          alt="Hacker Wallpaper"
+          fill
+          className="object-cover"
+          priority
         />
+        {/* Dark overlay to keep UI readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020203]/80 via-transparent to-[#020203]/90" />
       </motion.div>
-      
-      {/* Dynamic Scan Line */}
+
+      {/* 2. 3D Perspective Grid Floor */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        <motion.div 
+          style={{ 
+            rotateX: gridTiltX,
+            rotateY: gridTiltY,
+          }}
+          className="w-[200vw] h-[200vh] origin-center"
+        >
+          <div className="w-full h-full bg-grid-3d opacity-20" />
+        </motion.div>
+      </div>
+
+      {/* 3. Interactive Mouse Light Source */}
       <motion.div 
-        animate={{ top: ['-10%', '110%'] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent shadow-[0_0_15px_rgba(0,255,255,0.3)] z-10 opacity-50"
+        style={{ 
+          x: useTransform(mouseX, (v) => v + window.innerWidth / 2 - 400),
+          y: useTransform(mouseY, (v) => v + window.innerHeight / 2 - 400),
+        }}
+        className="absolute w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] z-20 pointer-events-none opacity-60 mix-blend-screen"
       />
 
-      {/* Floating High-Tech Particles */}
+      {/* 4. Vertical Floating Data Streams */}
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          initial={{ opacity: 0, x: p.xInitial, y: "110%" }}
-          animate={{ 
-            opacity: [0, p.opacity, 0],
-            y: "-20%",
-            x: `calc(${p.xInitial} + ${p.xAnimate})` 
-          }}
+          initial={{ y: "110%", opacity: 0 }}
+          animate={{ y: "-10%", opacity: [0, p.opacity, 0] }}
           transition={{ 
             duration: p.duration, 
             repeat: Infinity, 
             delay: p.delay,
             ease: "linear" 
           }}
-          className="absolute w-px bg-gradient-to-t from-primary/0 via-primary/60 to-primary/0"
-          style={{ height: p.height }}
+          className="absolute w-[1px] bg-gradient-to-b from-transparent via-primary/40 to-transparent"
+          style={{ 
+            left: p.left, 
+            height: Math.random() * 200 + 100,
+            zIndex: 15
+          }}
         />
       ))}
 
-      {/* Interactive Ambient Glow Blobs */}
-      <motion.div 
-        style={{ x: blobX1, y: blobY1 }}
-        animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.1, 0.15, 0.1]
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-1/4 -right-1/4 w-[1000px] h-[1000px] bg-primary/10 rounded-full blur-[180px]" 
-      />
-      
-      <motion.div 
-        style={{ x: blobX2, y: blobY2 }}
-        animate={{ 
-          scale: [1.1, 1, 1.1],
-          opacity: [0.05, 0.1, 0.05]
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-secondary/5 rounded-full blur-[180px]" 
-      />
-
-      {/* Vignette & Noise Overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,2,3,0.8)_100%)]" />
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-overlay">
-        <div className="w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      {/* 5. CRT Scanline & Grain Overlays */}
+      <div className="absolute inset-0 z-30 pointer-events-none">
+        <div className="w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+        <div className="w-full h-full crt-effect opacity-10" />
       </div>
+
+      {/* Vignette */}
+      <div className="absolute inset-0 z-40 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,2,3,0.9)_100%)] pointer-events-none" />
     </div>
   );
 }
