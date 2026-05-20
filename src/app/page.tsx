@@ -86,16 +86,16 @@ export default function Home() {
       
       <div className="container mx-auto h-screen relative z-10 pointer-events-none">
         
-        {/* Sidebar Navigasi - Reposisi Presisi Desktop */}
+        {/* Sidebar Navigasi - Reposisi Presisi Desktop (Lebih Tinggi) */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           className={cn(
             "fixed z-[60] bg-black/40 backdrop-blur-3xl border border-white/10 shadow-2xl transition-all duration-500 flex pointer-events-auto",
-            // Desktop: Locked Left Center - Adjusted to be higher (top-[40%])
-            "lg:left-8 lg:top-[40%] lg:-translate-y-1/2 lg:bottom-auto lg:flex-col lg:gap-6 lg:p-5 lg:rounded-[3rem] lg:w-auto",
+            // Desktop: Locked Left Center - Adjusted to be much higher (top-[30%])
+            "lg:left-8 lg:top-[30%] lg:-translate-y-0 lg:bottom-auto lg:flex-col lg:gap-6 lg:p-5 lg:rounded-[3rem] lg:w-auto",
             // Mobile: Bottom horizontal dock
-            "left-4 right-4 bottom-14 flex-row justify-around gap-2 p-3 rounded-2xl lg:bottom-auto lg:right-auto"
+            "left-4 right-4 bottom-14 flex-row justify-around gap-2 p-3 rounded-2xl lg:top-auto lg:bottom-auto lg:right-auto"
           )}
         >
           {folders.map((folder) => (
