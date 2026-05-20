@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -69,56 +70,55 @@ export default function Home() {
         activeWindow={activeWindow}
       />
       
-      <div className="container mx-auto h-full pt-16 relative">
+      <div className="container mx-auto h-full relative">
         
-        {/* Desktop Sidebar Icons - Adjusted Position to be Higher */}
+        {/* Sidebar Icons Container - Matched to Image */}
         <motion.div 
-          initial={{ opacity: 0, x: -100 }}
+          initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="fixed left-6 top-28 hidden md:grid grid-cols-1 gap-8 z-40 bg-black/60 backdrop-blur-xl p-5 rounded-[2rem] border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+          className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-10 z-40 bg-black/40 backdrop-blur-2xl px-6 py-12 rounded-[3rem] border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
         >
           {folders.map((folder) => (
             <motion.button
               key={folder.id}
-              whileHover={{ scale: 1.05, x: 5 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => handleOpenWindow(folder.id)}
-              className="flex flex-col items-center gap-2 group"
+              className="flex flex-col items-center gap-3 group"
             >
               <div className={cn(
-                "p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:border-primary/40 group-hover:bg-primary/5 transition-all relative overflow-hidden",
-                openWindows.includes(folder.id) && "border-primary/20 bg-primary/[0.02]"
+                "p-4 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:border-primary/50 group-hover:bg-primary/10 transition-all",
+                openWindows.includes(folder.id) && "border-primary/30 bg-primary/5"
               )}>
-                <folder.icon className={`w-5 h-5 ${folder.color} relative z-10`} />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <folder.icon className={`w-6 h-6 ${folder.color}`} />
               </div>
-              <span className="text-[8px] font-mono font-bold uppercase tracking-[0.2em] text-white/40 group-hover:text-primary transition-colors">
+              <span className="text-[7px] font-mono font-black uppercase tracking-[0.3em] text-white/30 group-hover:text-primary transition-colors">
                 {folder.name}
               </span>
             </motion.button>
           ))}
         </motion.div>
 
-        {/* Hero Section / Login Terminal UI */}
-        <div className="w-full h-full flex items-center justify-center overflow-hidden pl-0 md:pl-24">
+        {/* Hero Section */}
+        <div className="w-full h-full flex items-center justify-center pl-0 md:pl-32">
           <Hero onStart={() => handleOpenWindow('about')} />
         </div>
 
-        {/* Dynamic Window Layer */}
-        <div className="fixed inset-0 pointer-events-none z-50 pt-20 px-8 flex items-center justify-center">
+        {/* Window Layer */}
+        <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center p-8">
           <AnimatePresence>
             {openWindows.map((winId, index) => (
               <LinuxWindow 
                 key={winId}
                 title={folders.find(f => f.id === winId)?.name || 'Terminal'} 
-                className="w-full max-w-4xl h-[70vh]"
+                className="w-full max-w-5xl h-[75vh]"
                 onClose={() => handleCloseWindow(winId)}
                 onMinimize={() => handleMinimizeWindow(winId)}
                 isMinimized={minimizedWindows.includes(winId)}
                 isActive={activeWindow === winId}
                 onFocus={() => setActiveWindow(winId)}
                 style={{ 
-                  zIndex: activeWindow === winId ? 60 : 50 + index,
+                  zIndex: activeWindow === winId ? 70 : 60 + index,
                 }}
               >
                 {winId === 'about' && <About />}
@@ -132,24 +132,24 @@ export default function Home() {
 
       </div>
 
-      {/* OS System Footer */}
+      {/* System Footer */}
       <div className="fixed bottom-0 left-0 right-0 h-10 bg-black/95 border-t border-white/10 flex items-center px-6 justify-between text-[9px] font-mono text-muted-foreground z-[100] backdrop-blur-xl">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 text-primary">
-            <span className="w-2 h-2 rounded-full animate-pulse shadow-lg bg-primary shadow-primary/50" />
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(0,255,255,0.8)]" />
             <span className="font-bold tracking-widest uppercase">SYSTEM: ONLINE</span>
           </div>
-          <div className="hidden sm:block opacity-50 uppercase tracking-tighter">
+          <div className="hidden sm:block opacity-40 uppercase tracking-widest">
             PATH: {`/root/sys/${activeWindow || 'desktop'}`}
           </div>
         </div>
         
-        <div className="flex gap-6 items-center">
-          <div className="flex gap-4">
+        <div className="flex gap-8 items-center">
+          <div className="flex gap-4 opacity-70">
             <span className="flex gap-1">SWAP: <span className="text-white">0.0GB</span></span>
             <span className="flex gap-1">CPU_LOAD: <span className="text-secondary">02.8%</span></span>
           </div>
-          <div className="text-[10px] text-white/40 tracking-[0.4em] font-black hidden lg:block">AFRIZAL_KERNEL_X64_LTS</div>
+          <div className="text-[10px] text-white/40 tracking-[0.5em] font-black hidden lg:block">AFRIZAL_KERNEL_X64_LTS</div>
         </div>
       </div>
     </main>
