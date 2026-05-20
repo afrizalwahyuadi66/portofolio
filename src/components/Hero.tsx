@@ -21,57 +21,57 @@ export default function Hero({ onStart }: HeroProps) {
   }, []);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-20 items-center w-full max-w-7xl mx-auto px-6">
+    <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center w-full max-w-7xl mx-auto px-6 py-20 lg:py-0 overflow-y-auto lg:overflow-visible no-scrollbar">
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="space-y-12"
+        className="space-y-8 lg:space-y-12"
       >
-        <div className="inline-flex items-center gap-3 px-5 py-2 bg-primary/5 border border-primary/20 text-[10px] font-mono font-bold tracking-[0.4em] text-primary uppercase rounded-full backdrop-blur-md">
+        <div className="inline-flex items-center gap-3 px-4 lg:px-5 py-1.5 lg:py-2 bg-primary/5 border border-primary/20 text-[8px] lg:text-[10px] font-mono font-bold tracking-[0.3em] lg:tracking-[0.4em] text-primary uppercase rounded-full backdrop-blur-md">
           <Activity className="w-3 h-3 animate-pulse" />
           SESSION: ANONYMOUS // KERNEL V4.0.2
         </div>
         
-        <div className="space-y-8">
-          <h1 className="text-7xl md:text-9xl font-headline font-black tracking-tighter leading-[0.8] text-white">
+        <div className="space-y-6 lg:space-y-8">
+          <h1 className="text-5xl md:text-7xl lg:text-9xl font-headline font-black tracking-tighter leading-[0.8] text-white">
             CYBER <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary glow-text">INTELLIGENCE</span>
           </h1>
           
-          <div className="h-1 w-32 bg-primary" />
+          <div className="h-1 w-20 lg:w-32 bg-primary" />
           
-          <div className="max-w-md border-l-2 border-white/10 pl-10 py-2">
-            <p className="text-base text-muted-foreground font-mono leading-relaxed opacity-70">
+          <div className="max-w-md border-l-2 border-white/10 pl-6 lg:pl-10 py-1 lg:py-2">
+            <p className="text-xs lg:text-base text-muted-foreground font-mono leading-relaxed opacity-70">
               Membangun benteng digital melalui penetrasi tingkat tinggi. Lakukan otentikasi kernel untuk mengekstrak data src.
             </p>
           </div>
           
-          <div className="pt-6">
+          <div className="pt-4 lg:pt-6">
             <Button 
               onClick={onStart}
               size="lg" 
-              className="bg-primary text-black font-black hover:bg-primary/80 group rounded-none h-16 px-12 tracking-[0.3em] shadow-[0_0_40px_rgba(0,255,255,0.4)] transition-all hover:scale-105"
+              className="bg-primary text-black font-black hover:bg-primary/80 group rounded-none h-14 lg:h-16 px-8 lg:px-12 tracking-[0.2em] lg:tracking-[0.3em] shadow-[0_0_40px_rgba(0,255,255,0.4)] transition-all hover:scale-105"
             >
               LOGIN.sh
-              <ChevronRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="ml-2 lg:ml-3 w-5 h-5 lg:w-6 lg:h-6 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
       </motion.div>
 
-      {/* Draggable Terminal View on the Right */}
+      {/* Draggable Terminal View on the Right - Interactive & Responsive */}
       <div className="relative hidden lg:block perspective-2000">
         <motion.div
           drag
           dragMomentum={false}
           initial={{ rotateY: 15, opacity: 0, x: 50 }}
           animate={{ rotateY: 5, opacity: 1, x: 0 }}
-          whileDrag={{ rotateY: 0, scale: 1.02, zIndex: 100 }}
+          whileDrag={{ rotateY: 0, scale: 1.05, zIndex: 200 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="relative z-10 cursor-grab active:cursor-grabbing pointer-events-auto"
         >
-          <div className="terminal-window bg-black/80 rounded-xl overflow-hidden border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.9)]">
+          <div className="terminal-window bg-black/90 rounded-xl overflow-hidden border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
             <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between pointer-events-none">
               <div className="flex gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
@@ -81,7 +81,7 @@ export default function Hero({ onStart }: HeroProps) {
               <div className="text-[9px] font-mono text-white/40 tracking-widest">/ROOT/SYS/ KERNEL_BOOT.LOG</div>
             </div>
             
-            <div className="p-6 font-mono text-[10px] space-y-4 pointer-events-none select-none">
+            <div className="p-6 font-mono text-[10px] space-y-4 pointer-events-none select-none min-w-[450px]">
               <div className="flex gap-3 text-secondary">
                 <Terminal className="w-3 h-3" />
                 <span>[root@afrizal-os] # boot --verbose</span>
@@ -117,7 +117,8 @@ export default function Hero({ onStart }: HeroProps) {
           </div>
         </motion.div>
         
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 blur-[140px] rounded-full -z-10" />
+        {/* Glow behind terminal */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10" />
       </div>
     </div>
   );
